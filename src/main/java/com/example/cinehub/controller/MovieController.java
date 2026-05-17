@@ -1,12 +1,13 @@
 package com.example.cinehub.controller;
 
+import com.example.cinehub.constant.Movie.MovieType;
+import com.example.cinehub.dto.MovieDTO;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.repository.MovieRepository;
+import com.example.cinehub.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,16 +17,43 @@ import java.util.List;
 public class MovieController {
 
     @Autowired
-    private MovieRepository movieRepository;
+    private MovieService movieService; // Chỉ tiêm Service, tuyệt đối không tiêm Repository ở đây nữa!
 
     @GetMapping
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    public ResponseEntity<List<MovieDTO>> getAllMovies() {
+        return ResponseEntity.ok(movieService.getAllMovies());
     }
 
     @GetMapping("/trending")
-    public List<Movie> getTrendingMovies() {
+    public List<MovieDTO> getTrendingMovies() {
         // Sau này bạn có thể viết Query lấy phim isTrending = true ở đây
-        return movieRepository.findAll();
+        return movieService.getTrendingMovies();
+    }
+
+    @GetMapping("/type")
+    public ResponseEntity<List<MovieDTO>> getMoviesByMovieType(MovieType movieType) {
+        return ResponseEntity.ok(movieService.getMoviesByMovieType(movieType));
+    }
+    // 🌟 API Lọc phim theo thể loại (Dùng PathVariable để lấy slug từ URL)
+    @GetMapping("/genre/{slug}")
+    public ResponseEntity<List<MovieDTO>> getMoviesByGenre(@PathVariable String slug) {
+        List<MovieDTO> movies = movieService.getMoviesByGenre(slug);
+        return ResponseEntity.ok(movies);
+    }
+
+    @PostMapping
+    public ResponseEntity<MovieDTO> createMovie(@RequestBody Movie movie) {
+        return ResponseEntity.ok(movieService.createMovie(movie));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MovieDTO> updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
+        return ResponseEntity.ok(movieService.updateMovie(id,movie));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMovie(@PathVariable Long id) {
+        movieService.deleteMovie(id);
+        return ResponseEntity.ok("Đã xóa phim thành công");
     }
 }
