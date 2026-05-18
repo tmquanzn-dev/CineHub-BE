@@ -32,7 +32,7 @@ public class GenreServiceImpl implements GenreService {
         GenreDTO dto = new GenreDTO();
         dto.setId(genre.getId());
         dto.setName(genre.getName());
-        dto.setSlug(dto.getSlug());
+        dto.setSlug(genre.getSlug());
         return dto;
     }
 
