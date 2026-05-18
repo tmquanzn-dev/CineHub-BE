@@ -42,9 +42,9 @@ public class EpisodeServiceImpl implements EpisodeService {
 
         episode.setTitle(episodeDetails.getTitle());
         episode.setEpisodeNumber(episodeDetails.getEpisodeNumber());
-        episode.setVideoUrl(episode.getVideoUrl());
-        episode.setThumbnailUrl(episode.getThumbnailUrl());
-        episode.setDuration(episode.getDuration());
+        episode.setVideoUrl(episodeDetails.getVideoUrl());
+        episode.setThumbnailUrl(episodeDetails.getThumbnailUrl());
+        episode.setDuration(episodeDetails.getDuration());
 
         return convertToDTO(episodeRepository.save(episode));
     }
