@@ -56,7 +56,7 @@ public class EpisodeServiceImpl implements EpisodeService {
         episodeRepository.delete(episode);
     }
 
-    public EpisodeDTO convertToDTO(Episode episode) {
+    private EpisodeDTO convertToDTO(Episode episode) {
         EpisodeDTO episodeDTO = new EpisodeDTO();
         episodeDTO.setId(episode.getId());
         episodeDTO.setTitle(episode.getTitle());

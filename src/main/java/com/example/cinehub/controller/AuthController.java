@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     @Autowired private AuthenticationManager authenticationManager;
     @Autowired private JwtUtil jwtUtil;
-    @Autowired private UserServiceImpl userService;
+    @Autowired private UserService userService;
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private UserRepository userRepository;
 
