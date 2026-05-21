@@ -4,6 +4,7 @@ import com.example.cinehub.constant.Movie.MovieType;
 import com.example.cinehub.dto.GenreDTO;
 import com.example.cinehub.dto.MovieDTO;
 import com.example.cinehub.entity.Movie;
+import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(Long id) {
-        Movie m = movieRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy phim"));
+        Movie m = movieRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy phim"));
         movieRepository.delete(m);
     }
     //Ham bổ trợ đóng vai trò convert thủ công(Mapping) từ Entity sang DTO sạch sẽ

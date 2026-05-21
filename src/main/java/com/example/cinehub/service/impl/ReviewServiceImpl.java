@@ -26,6 +26,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<ReviewDTO> getReviewsByMovieId(Long movieId) {
+        if (!movieRepository.existsById(movieId)) {
+            throw new ResourceNotFoundException("Không tìm thấy film có ID = " + movieId);
+        }
         List<Review> reviews = reviewRepository.findByMovieIdOrderByCreateAtDesc(movieId);
         return reviews.stream().map(this::convertToDTO).collect(Collectors.toList());
     }

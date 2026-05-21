@@ -30,7 +30,7 @@ public class MovieController {
     }
 
     @GetMapping("/type")
-    public ResponseEntity<List<MovieDTO>> getMoviesByMovieType(MovieType movieType) {
+    public ResponseEntity<List<MovieDTO>> getMoviesByMovieType(@RequestParam MovieType movieType) {
         return ResponseEntity.ok(movieService.getMoviesByMovieType(movieType));
     }
     // 🌟 API Lọc phim theo thể loại (Dùng PathVariable để lấy slug từ URL)
