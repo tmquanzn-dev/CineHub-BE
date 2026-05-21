@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/history")
-@CrossOrigin(origins = "http:localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 public class WatchHistoryController {
     @Autowired private WatchHistoryService watchHistoryService;
     @Autowired private UserRepository userRepository;

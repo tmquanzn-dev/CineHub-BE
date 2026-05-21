@@ -27,9 +27,11 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieDTO> getTrendingMovies() {
-        // Sau này bạn viết hàm findByIsTrendingTrue() ở Repository thì gọi ở đây nhé
         List<Movie> movies = movieRepository.findAll();
-        return movies.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return movies.stream()
+                .filter(movie -> Boolean.TRUE.equals(movie.getIsTrending()))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

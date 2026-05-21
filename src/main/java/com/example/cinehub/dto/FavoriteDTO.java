@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class FavoriteDTO {
     private Long movieId;
-    private String movieTilte;
+    private String movieTitle;
     private String posterUrl;
     private LocalDateTime addedAt;
 }

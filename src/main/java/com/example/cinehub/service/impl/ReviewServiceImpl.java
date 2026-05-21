@@ -4,6 +4,7 @@ import com.example.cinehub.dto.ReviewDTO;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.entity.Review;
 import com.example.cinehub.entity.User;
+import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.repository.ReviewRepository;
 import com.example.cinehub.repository.UserRepository;
@@ -32,9 +33,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewDTO addReview(Long movieId,Long userId ,Review review ) {
         Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(()->new RuntimeException("Không tìm thấy film có ID = " + movieId));
+                .orElseThrow(()->new ResourceNotFoundException("Không tìm thấy film có ID = " + movieId));
         User user = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("Không tìm thaấy user có ID = " + userId));
+                .orElseThrow(()-> new ResourceNotFoundException("Không tìm thaấy user có ID = " + userId));
 
         review.setMovie(movie);
         review.setUser(user);
@@ -45,7 +46,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(()->new RuntimeException("Không tìm thấy bình luận có ID = "+ reviewId));
+                .orElseThrow(()->new ResourceNotFoundException("Không tìm thấy bình luận có ID = "+ reviewId));
         reviewRepository.delete(review);
     }
 

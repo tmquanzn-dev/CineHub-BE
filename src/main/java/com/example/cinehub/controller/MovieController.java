@@ -26,7 +26,6 @@ public class MovieController {
 
     @GetMapping("/trending")
     public List<MovieDTO> getTrendingMovies() {
-        // Sau này bạn có thể viết Query lấy phim isTrending = true ở đây
         return movieService.getTrendingMovies();
     }
 

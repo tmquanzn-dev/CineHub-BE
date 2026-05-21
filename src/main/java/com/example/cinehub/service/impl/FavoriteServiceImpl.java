@@ -57,7 +57,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private FavoriteDTO convertToDTO(Favorite favorite) {
         FavoriteDTO dto = new FavoriteDTO();
         dto.setMovieId(favorite.getMovie().getId());
-        dto.setMovieTilte(favorite.getMovie().getTitle());
+        dto.setMovieTitle(favorite.getMovie().getTitle());
         dto.setPosterUrl(favorite.getMovie().getPosterUrl());
         dto.setAddedAt(favorite.getAddedAt());
         return dto;
