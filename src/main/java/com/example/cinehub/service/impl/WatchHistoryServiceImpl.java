@@ -5,6 +5,7 @@ import com.example.cinehub.entity.Episode;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.entity.User;
 import com.example.cinehub.entity.WatchHistory;
+import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.EpisodeRepository;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.repository.UserRepository;
@@ -38,9 +39,9 @@ public class WatchHistoryServiceImpl implements WatchHistoryService {
     public WatchHistoryDTO saveOrUpdateHistory(Long userId, Long movieId,
                                                Long episodeId, Integer lastPosition) {
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new RuntimeException("Không tìm thấy user"));
+                .orElseThrow(()->new ResourceNotFoundException("Không tìm thấy user"));
         Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(()->new RuntimeException("Không tìm thấy phim"));
+                .orElseThrow(()->new ResourceNotFoundException("Không tìm thấy phim"));
 
         // Upsert: tìm record cũ nếu có, không có thì tạo mới
         // Tránh tạo nhiều record trùng nhau cho cùng 1 user + phim
@@ -55,7 +56,7 @@ public class WatchHistoryServiceImpl implements WatchHistoryService {
 
         if (episodeId != null) {
             Episode episode = episodeRepository.findById(episodeId)
-                    .orElseThrow(()->new RuntimeException("Không tìm thấy tập phim"));
+                    .orElseThrow(()->new ResourceNotFoundException("Không tìm thấy tập phim"));
             watchHistory.setEpisode(episode);
         }
         return convertToDTO(watchHistoryRepository.save(watchHistory));

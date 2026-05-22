@@ -2,6 +2,7 @@ package com.example.cinehub.service.impl;
 
 import com.example.cinehub.dto.UserDTO;
 import com.example.cinehub.entity.User;
+import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDTO getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("Không tìm thấy User với id = " +id));
+        User user = userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Không tìm thấy User với id = " +id));
         return convertToDTO(user);
     }
 
@@ -43,14 +44,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDTO updateUser(Long id, User userDetails) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy User với id = " + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy User với id = " + id));
         user.setAvatarUrl(userDetails.getAvatarUrl());
         return convertToDTO(userRepository.save(user));
     }
 
     @Override
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy User với id = " + id));
+        User user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy User với id = " + id));
         userRepository.delete(user);
     }
 

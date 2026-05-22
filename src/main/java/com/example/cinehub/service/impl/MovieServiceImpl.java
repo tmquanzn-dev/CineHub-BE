@@ -57,7 +57,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDTO updateMovie(Long id, Movie movieDetails) {
-        Movie movie = movieRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy phim"));
+        Movie movie = movieRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy phim"));
         movie.setTitle(movieDetails.getTitle());
         movie.setDescription(movieDetails.getDescription());
         movie.setPosterUrl(movieDetails.getPosterUrl());
