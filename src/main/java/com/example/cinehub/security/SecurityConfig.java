@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // public - ai cung goi duoc
                         .requestMatchers("/error", "/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/movies/all" ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/movies").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/genres/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/movies/*/episodes").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/movies/*/reviews").permitAll()

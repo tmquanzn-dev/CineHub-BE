@@ -8,7 +8,7 @@ import com.example.cinehub.entity.Movie;
 import java.util.List;
 
 public interface MovieService {
-    List<MovieDTO> getAllMovies();
+    List<MovieDTO> getAllMoviesForAdmin();
     List<MovieDTO> getTrendingMovies();
     List<MovieDTO> getMoviesByMovieType(MovieType movieType);
     List<MovieDTO> getMoviesByGenre(String genreSlug);

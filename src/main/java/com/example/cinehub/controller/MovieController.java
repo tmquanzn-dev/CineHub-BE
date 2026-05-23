@@ -21,8 +21,14 @@ public class MovieController {
     private MovieService movieService; // Chỉ tiêm Service, tuyệt đối không tiêm Repository ở đây nữa!
 
     @GetMapping
-    public ResponseEntity<List<MovieDTO>> getAllMovies() {
-        return ResponseEntity.ok(movieService.getAllMovies());
+    public ResponseEntity<PageResponse<MovieDTO>> getMovies(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(movieService.getAllMoviesPaged(page, size));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<MovieDTO>> getAllMooviesForAdmin() {
+        return ResponseEntity.ok(movieService.getAllMoviesForAdmin());
     }
 
     @GetMapping("/trending")
@@ -39,12 +45,6 @@ public class MovieController {
     public ResponseEntity<List<MovieDTO>> getMoviesByGenre(@PathVariable String slug) {
         List<MovieDTO> movies = movieService.getMoviesByGenre(slug);
         return ResponseEntity.ok(movies);
-    }
-
-    @GetMapping("/paged")
-    public ResponseEntity<PageResponse<MovieDTO>> getAllMoviesPaged(@RequestParam(defaultValue = "0") int page,
-                                                                    @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(movieService.getAllMoviesPaged(page, size));
     }
 
     @PostMapping
