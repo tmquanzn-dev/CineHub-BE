@@ -1,5 +1,6 @@
 package com.example.cinehub.service.impl;
 
+import com.example.cinehub.constant.Movie.MovieStatus;
 import com.example.cinehub.constant.Movie.MovieType;
 import com.example.cinehub.dto.GenreDTO;
 import com.example.cinehub.dto.MovieDTO;
@@ -8,10 +9,12 @@ import com.example.cinehub.entity.Movie;
 import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.MovieService;
+import com.example.cinehub.specification.MovieSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
@@ -89,10 +92,30 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public PageResponse<MovieDTO> getAllMoviesPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-
+    public PageResponse<MovieDTO> getAllMoviesPaged(Pageable pageable) {
         Page<Movie> moviePage = movieRepository.findAll(pageable);
+
+        List<MovieDTO> dtos = moviePage.getContent()
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(
+                dtos,
+                moviePage.getNumber(),
+                moviePage.getTotalPages(),
+                moviePage.getTotalElements(),
+                moviePage.isLast()
+        );
+    }
+
+    @Override
+    public PageResponse<MovieDTO> searchAndFilterMovies(String title, MovieType movieType, MovieStatus movieStatus, Pageable pageable) {
+        Specification<Movie> spec = MovieSpecification.hasTitle(title)
+                .and(MovieSpecification.hasMovieType(movieType))
+                .and(MovieSpecification.hasStatus(movieStatus));
+
+        Page<Movie> moviePage = movieRepository.findAll(spec, pageable);
 
         List<MovieDTO> dtos = moviePage.getContent()
                 .stream()
