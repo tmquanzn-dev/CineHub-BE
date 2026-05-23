@@ -2,6 +2,7 @@ package com.example.cinehub.controller;
 
 import com.example.cinehub.constant.Movie.MovieType;
 import com.example.cinehub.dto.MovieDTO;
+import com.example.cinehub.dto.PageResponse;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.MovieService;
@@ -38,6 +39,12 @@ public class MovieController {
     public ResponseEntity<List<MovieDTO>> getMoviesByGenre(@PathVariable String slug) {
         List<MovieDTO> movies = movieService.getMoviesByGenre(slug);
         return ResponseEntity.ok(movies);
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<PageResponse<MovieDTO>> getAllMoviesPaged(@RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(movieService.getAllMoviesPaged(page, size));
     }
 
     @PostMapping

@@ -34,10 +34,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDTO createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Username đã tồn tại!");
+            throw new ResourceNotFoundException("Username đã tồn tại!");
         }
         if(userRepository.existsByEmail(user.getEmail()))
-            throw new RuntimeException("Email đã tồn tại");
+            throw new ResourceNotFoundException("Email đã tồn tại");
         return convertToDTO(userRepository.save(user));
     }
 

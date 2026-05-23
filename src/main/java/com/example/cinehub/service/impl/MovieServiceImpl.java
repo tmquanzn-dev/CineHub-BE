@@ -3,12 +3,17 @@ package com.example.cinehub.service.impl;
 import com.example.cinehub.constant.Movie.MovieType;
 import com.example.cinehub.dto.GenreDTO;
 import com.example.cinehub.dto.MovieDTO;
+import com.example.cinehub.dto.PageResponse;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Set;
@@ -82,6 +87,27 @@ public class MovieServiceImpl implements MovieService {
         Movie m = movieRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy phim"));
         movieRepository.delete(m);
     }
+
+    @Override
+    public PageResponse<MovieDTO> getAllMoviesPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Movie> moviePage = movieRepository.findAll(pageable);
+
+        List<MovieDTO> dtos = moviePage.getContent()
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(
+                dtos,
+                moviePage.getNumber(),
+                moviePage.getTotalPages(),
+                moviePage.getTotalElements(),
+                moviePage.isLast()
+        );
+    }
+
     //Ham bổ trợ đóng vai trò convert thủ công(Mapping) từ Entity sang DTO sạch sẽ
     private MovieDTO convertToDTO(Movie movie) {
         MovieDTO dto = new MovieDTO();
