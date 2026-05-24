@@ -1,4 +1,4 @@
-package com.example.cinehub.dto;
+package com.example.cinehub.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

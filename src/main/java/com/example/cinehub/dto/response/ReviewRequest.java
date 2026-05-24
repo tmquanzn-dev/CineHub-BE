@@ -1,4 +1,4 @@
-package com.example.cinehub.dto;
+package com.example.cinehub.dto.response;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

@@ -1,6 +1,6 @@
 package com.example.cinehub.service;
 
-import com.example.cinehub.dto.EpisodeDTO;
+import com.example.cinehub.dto.response.EpisodeDTO;
 import com.example.cinehub.entity.Episode;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.example.cinehub.service.impl;
 
-import com.example.cinehub.dto.EpisodeDTO;
+import com.example.cinehub.dto.response.EpisodeDTO;
 import com.example.cinehub.entity.Episode;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.exception.ResourceNotFoundException;

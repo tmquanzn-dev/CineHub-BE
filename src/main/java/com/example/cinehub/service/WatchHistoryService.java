@@ -1,6 +1,6 @@
 package com.example.cinehub.service;
 
-import com.example.cinehub.dto.WatchHistoryDTO;
+import com.example.cinehub.dto.response.WatchHistoryDTO;
 
 
 import java.util.List;

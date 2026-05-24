@@ -41,6 +41,7 @@ public class WatchHistory {
     private Episode episode;
 
     @PrePersist
+    @PreUpdate
     protected void onCreate() {
         updatedAt = LocalDateTime.now();
     }

@@ -1,8 +1,7 @@
 package com.example.cinehub.controller;
 
-import com.example.cinehub.dto.GenreDTO;
+import com.example.cinehub.dto.response.GenreDTO;
 import com.example.cinehub.entity.Genre;
-import com.example.cinehub.repository.GenreRepository;
 import com.example.cinehub.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

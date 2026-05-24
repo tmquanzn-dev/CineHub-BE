@@ -1,6 +1,6 @@
 package com.example.cinehub.controller;
 
-import com.example.cinehub.dto.FavoriteDTO;
+import com.example.cinehub.dto.response.FavoriteDTO;
 import com.example.cinehub.entity.User;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.FavoriteService;

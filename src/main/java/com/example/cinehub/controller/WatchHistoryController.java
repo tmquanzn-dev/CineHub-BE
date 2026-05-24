@@ -1,6 +1,6 @@
 package com.example.cinehub.controller;
 
-import com.example.cinehub.dto.WatchHistoryDTO;
+import com.example.cinehub.dto.response.WatchHistoryDTO;
 import com.example.cinehub.entity.User;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.WatchHistoryService;

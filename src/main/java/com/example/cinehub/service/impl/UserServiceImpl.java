@@ -1,7 +1,8 @@
 package com.example.cinehub.service.impl;
 
-import com.example.cinehub.dto.UserDTO;
+import com.example.cinehub.dto.response.UserDTO;
 import com.example.cinehub.entity.User;
+import com.example.cinehub.exception.BadRequestException;
 import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.UserService;
@@ -34,10 +35,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDTO createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new ResourceNotFoundException("Username đã tồn tại!");
+            throw new BadRequestException("Username đã tồn tại!");
         }
         if(userRepository.existsByEmail(user.getEmail()))
-            throw new ResourceNotFoundException("Email đã tồn tại");
+            throw new BadRequestException("Email đã tồn tại");
         return convertToDTO(userRepository.save(user));
     }
 

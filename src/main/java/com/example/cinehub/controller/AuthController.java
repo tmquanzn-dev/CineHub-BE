@@ -1,10 +1,10 @@
 package com.example.cinehub.controller;
 
 import com.example.cinehub.constant.User.RoleUser;
-import com.example.cinehub.dto.AuthResponse;
-import com.example.cinehub.dto.LoginRequest;
-import com.example.cinehub.dto.RegisterRequest;
-import com.example.cinehub.dto.UserDTO;
+import com.example.cinehub.dto.response.AuthResponse;
+import com.example.cinehub.dto.request.LoginRequest;
+import com.example.cinehub.dto.request.RegisterRequest;
+import com.example.cinehub.dto.response.UserDTO;
 import com.example.cinehub.entity.User;
 import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.UserRepository;

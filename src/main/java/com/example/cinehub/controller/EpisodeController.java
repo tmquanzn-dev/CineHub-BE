@@ -1,6 +1,6 @@
 package com.example.cinehub.controller;
 
-import com.example.cinehub.dto.EpisodeDTO;
+import com.example.cinehub.dto.response.EpisodeDTO;
 import com.example.cinehub.entity.Episode;
 import com.example.cinehub.service.EpisodeService;
 import org.springframework.beans.factory.annotation.Autowired;

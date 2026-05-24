@@ -1,6 +1,6 @@
 package com.example.cinehub.controller;
 
-import com.example.cinehub.dto.UserDTO;
+import com.example.cinehub.dto.response.UserDTO;
 import com.example.cinehub.entity.User;
 import com.example.cinehub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

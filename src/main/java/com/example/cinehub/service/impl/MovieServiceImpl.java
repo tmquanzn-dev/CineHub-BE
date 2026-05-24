@@ -2,17 +2,19 @@ package com.example.cinehub.service.impl;
 
 import com.example.cinehub.constant.Movie.MovieStatus;
 import com.example.cinehub.constant.Movie.MovieType;
-import com.example.cinehub.dto.GenreDTO;
-import com.example.cinehub.dto.MovieDTO;
-import com.example.cinehub.dto.PageResponse;
+import com.example.cinehub.dto.request.MovieRequest;
+import com.example.cinehub.dto.response.GenreDTO;
+import com.example.cinehub.dto.response.MovieDTO;
+import com.example.cinehub.dto.response.PageResponse;
+import com.example.cinehub.entity.Genre;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.exception.ResourceNotFoundException;
+import com.example.cinehub.repository.GenreRepository;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.MovieService;
 import com.example.cinehub.specification.MovieSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Autowired
     private MovieRepository movieRepository;
+
+    @Autowired private GenreRepository genreRepository;
 
     @Override
     public List<MovieDTO> getAllMoviesForAdmin() {
@@ -59,12 +63,32 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieDTO createMovie(Movie movie) {
+    public MovieDTO createMovie(MovieRequest request) {
+        Movie movie  = new Movie();
+        movie.setTitle(request.getTitle());
+        movie.setDescription(request.getDescription());
+        movie.setPosterUrl(request.getPosterUrl());
+        movie.setBackdropUrl(request.getBackdropUrl());
+        movie.setReleaseDate(request.getReleaseDate());
+        movie.setDuration(request.getDuration());
+        movie.setRating(request.getRating());
+        movie.setIsTrending(request.getIsTrending());
+        movie.setIsTopRated(request.getIsTopRated());
+        movie.setMovieType(request.getMovieType());
+        movie.setStatus(request.getStatus());
+
+        if (request.getGenreIds() != null && !request.getGenreIds().isEmpty()) {
+            Set<Genre> genres = request.getGenreIds().stream()
+                    .map(genredId-> genreRepository.findById(genredId)
+                                    .orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy thể loại")))
+                    .collect(Collectors.toSet());
+            movie.setGenres(genres);
+        }
         return convertToDTO(movieRepository.save(movie));
     }
 
     @Override
-    public MovieDTO updateMovie(Long id, Movie movieDetails) {
+    public MovieDTO updateMovie(Long id, MovieRequest movieDetails) {
         Movie movie = movieRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy phim"));
         movie.setTitle(movieDetails.getTitle());
         movie.setDescription(movieDetails.getDescription());
@@ -78,10 +102,13 @@ public class MovieServiceImpl implements MovieService {
         movie.setMovieType(movieDetails.getMovieType());
         movie.setStatus(movieDetails.getStatus());
 
-        if (movieDetails.getGenres() != null) {
-            movie.setGenres(movieDetails.getGenres());
+        if (movieDetails.getGenreIds() != null) {
+            Set<Genre> updatedGenres = movieDetails.getGenreIds().stream()
+                    .map(genreId -> genreRepository.findById(genreId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thể loại với ID: " + genreId)))
+                    .collect(Collectors.toSet());
+            movie.setGenres(updatedGenres); // Đè danh sách thể loại mới lên phim
         }
-
         return convertToDTO(movieRepository.save(movie));
     }
 
@@ -142,6 +169,10 @@ public class MovieServiceImpl implements MovieService {
         dto.setRating(movie.getRating());
         dto.setIsTrending(movie.getIsTrending());
         dto.setMovieType(movie.getMovieType());
+        dto.setDuration(movie.getDuration());
+        dto.setReleaseDate(movie.getReleaseDate());
+        dto.setStatus(movie.getStatus());
+        dto.setIsTopRated(movie.getIsTopRated());
 
         // Convert tập hợp các Genres lồng bên trong sang GenreDTO công thức song song
         if (movie.getGenres() != null) {

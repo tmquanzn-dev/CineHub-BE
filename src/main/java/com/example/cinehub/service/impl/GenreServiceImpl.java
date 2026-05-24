@@ -1,6 +1,6 @@
 package com.example.cinehub.service.impl;
 
-import com.example.cinehub.dto.GenreDTO;
+import com.example.cinehub.dto.response.GenreDTO;
 import com.example.cinehub.entity.Genre;
 import com.example.cinehub.repository.GenreRepository;
 import com.example.cinehub.service.GenreService;

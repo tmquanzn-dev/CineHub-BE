@@ -1,10 +1,11 @@
 package com.example.cinehub.service.impl;
 
-import com.example.cinehub.dto.FavoriteDTO;
+import com.example.cinehub.dto.response.FavoriteDTO;
 import com.example.cinehub.entity.Favorite;
 import com.example.cinehub.entity.FavoriteId;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.entity.User;
+import com.example.cinehub.exception.BadRequestException;
 import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.FavoriteRepository;
 import com.example.cinehub.repository.MovieRepository;
@@ -32,7 +33,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     public FavoriteDTO addFavorite(Long userId, Long movieId) {
         //Kiểm tra xem thích chưa. nếu rồi thì báo lỗi
         if (favoriteRepository.existsByIdUserIdAndIdMovieId(userId, movieId))
-            throw  new ResourceNotFoundException("Phim đã có trong danh sách yêu thích");
+            throw  new BadRequestException("Phim đã có trong danh sách yêu thích");
         User user = userRepository.findById(userId)
                 .orElseThrow(()->new ResourceNotFoundException("Không tìm thấy User có ID = " + userId));
         Movie movie = movieRepository.findById(movieId)

@@ -1,4 +1,4 @@
-package com.example.cinehub.dto;
+package com.example.cinehub.dto.response;
 
 import com.example.cinehub.constant.Movie.MovieStatus;
 import com.example.cinehub.constant.Movie.MovieType;

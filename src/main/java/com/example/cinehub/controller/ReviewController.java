@@ -1,7 +1,7 @@
 package com.example.cinehub.controller;
 
-import com.example.cinehub.dto.ReviewDTO;
-import com.example.cinehub.dto.ReviewRequest;
+import com.example.cinehub.dto.response.ReviewDTO;
+import com.example.cinehub.dto.response.ReviewRequest;
 import com.example.cinehub.entity.Review;
 import com.example.cinehub.service.ReviewService;
 import jakarta.validation.Valid;

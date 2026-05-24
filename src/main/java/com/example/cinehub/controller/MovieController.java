@@ -2,11 +2,12 @@ package com.example.cinehub.controller;
 
 import com.example.cinehub.constant.Movie.MovieStatus;
 import com.example.cinehub.constant.Movie.MovieType;
-import com.example.cinehub.dto.MovieDTO;
-import com.example.cinehub.dto.PageResponse;
+import com.example.cinehub.dto.request.MovieRequest;
+import com.example.cinehub.dto.response.MovieDTO;
+import com.example.cinehub.dto.response.PageResponse;
 import com.example.cinehub.entity.Movie;
-import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.MovieService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,12 +61,12 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieDTO> createMovie(@RequestBody Movie movie) {
-        return ResponseEntity.ok(movieService.createMovie(movie));
+    public ResponseEntity<MovieDTO> createMovie(@Valid @RequestBody MovieRequest movieRequest) {
+        return ResponseEntity.ok(movieService.createMovie(movieRequest));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovieDTO> updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
+    public ResponseEntity<MovieDTO> updateMovie(@PathVariable Long id,@Valid @RequestBody MovieRequest movie) {
         return ResponseEntity.ok(movieService.updateMovie(id,movie));
     }
 

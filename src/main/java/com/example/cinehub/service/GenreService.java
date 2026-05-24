@@ -1,6 +1,6 @@
 package com.example.cinehub.service;
 
-import com.example.cinehub.dto.GenreDTO;
+import com.example.cinehub.dto.response.GenreDTO;
 import com.example.cinehub.entity.Genre;
 
 import java.util.List;

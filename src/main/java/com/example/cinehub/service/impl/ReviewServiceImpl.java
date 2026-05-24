@@ -1,6 +1,6 @@
 package com.example.cinehub.service.impl;
 
-import com.example.cinehub.dto.ReviewDTO;
+import com.example.cinehub.dto.response.ReviewDTO;
 import com.example.cinehub.entity.Movie;
 import com.example.cinehub.entity.Review;
 import com.example.cinehub.entity.User;
