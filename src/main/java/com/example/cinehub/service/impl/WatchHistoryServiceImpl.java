@@ -13,6 +13,7 @@ import com.example.cinehub.repository.WatchHistoryRepository;
 import com.example.cinehub.service.WatchHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,12 +30,14 @@ public class WatchHistoryServiceImpl implements WatchHistoryService {
     @Autowired
     private EpisodeRepository episodeRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<WatchHistoryDTO> getHistoryByUser(Long userId) {
         List<WatchHistory> watchHistories = watchHistoryRepository.findByUserIdOrderByUpdatedAtDesc(userId);
         return watchHistories.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public WatchHistoryDTO saveOrUpdateHistory(Long userId, Long movieId,
                                                Long episodeId, Integer lastPosition) {
@@ -61,6 +64,7 @@ public class WatchHistoryServiceImpl implements WatchHistoryService {
         }
         return convertToDTO(watchHistoryRepository.save(watchHistory));
     }
+
 
     private WatchHistoryDTO convertToDTO(WatchHistory watchHistory) {
         WatchHistoryDTO dto = new WatchHistoryDTO();

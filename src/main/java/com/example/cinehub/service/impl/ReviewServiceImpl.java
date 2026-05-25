@@ -11,6 +11,7 @@ import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<ReviewDTO> getReviewsByMovieId(Long movieId) {
         if (!movieRepository.existsById(movieId)) {
@@ -33,6 +35,7 @@ public class ReviewServiceImpl implements ReviewService {
         return reviews.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public ReviewDTO addReview(Long movieId,Long userId ,Review review ) {
         Movie movie = movieRepository.findById(movieId)
@@ -46,6 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
         return convertToDTO(reviewRepository.save(review));
     }
 
+    @Transactional
     @Override
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)

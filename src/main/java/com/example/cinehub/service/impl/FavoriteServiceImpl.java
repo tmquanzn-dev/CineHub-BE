@@ -13,6 +13,7 @@ import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,12 +24,14 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired private UserRepository userRepository;
     @Autowired private MovieRepository movieRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<FavoriteDTO> getFavoritesByUser(Long userId) {
         List<Favorite> favorites = favoriteRepository.findByIdUserId(userId);
         return favorites.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public FavoriteDTO addFavorite(Long userId, Long movieId) {
         //Kiểm tra xem thích chưa. nếu rồi thì báo lỗi
@@ -46,11 +49,13 @@ public class FavoriteServiceImpl implements FavoriteService {
         return convertToDTO(favoriteRepository.save(favorite));
     }
 
+    @Transactional
     @Override
     public void deleteFavorite(Long userId, Long movieId) {
         favoriteRepository.deleteByUserIdAndMovieId(userId, movieId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean isFavorited(Long userId, Long movieId) {
         return favoriteRepository.existsByIdUserIdAndIdMovieId(userId, movieId);

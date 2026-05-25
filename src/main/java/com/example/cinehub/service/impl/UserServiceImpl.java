@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,18 +21,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<UserDTO> getAllUsers() {
         List<User> users =  userRepository.findAll();
         return users.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Không tìm thấy User với id = " +id));
         return convertToDTO(user);
     }
 
+    @Transactional
     @Override
     public UserDTO createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -43,6 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 
+    @Transactional
     @Override
     public UserDTO updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy User với id = " + id));
@@ -50,6 +55,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return convertToDTO(userRepository.save(user));
     }
 
+    @Transactional
     @Override
     public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy User với id = " + id));

@@ -2,6 +2,7 @@ package com.example.cinehub.controller;
 
 import com.example.cinehub.dto.response.FavoriteDTO;
 import com.example.cinehub.entity.User;
+import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class FavoriteController {
     private Long getUserId(Authentication authentication) {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(()->new RuntimeException("Không tìm thấy user"));
+                .orElseThrow(()->new ResourceNotFoundException("Không tìm thấy user"));
         return user.getId();
     }
 }

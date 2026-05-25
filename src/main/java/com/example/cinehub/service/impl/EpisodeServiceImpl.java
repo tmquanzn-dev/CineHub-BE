@@ -9,6 +9,7 @@ import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.EpisodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class EpisodeServiceImpl implements EpisodeService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<EpisodeDTO> getEpisodeByMovieId(Long id) {
         if(!movieRepository.existsById(id))
@@ -28,6 +30,7 @@ public class EpisodeServiceImpl implements EpisodeService {
         return episodes.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public EpisodeDTO addEpisode(Long id, Episode episode) {
         Movie movie = movieRepository.findById(id)
@@ -36,6 +39,7 @@ public class EpisodeServiceImpl implements EpisodeService {
         return convertToDTO(episodeRepository.save(episode));
     }
 
+    @Transactional
     @Override
     public EpisodeDTO updateEpisode(Long id, Episode episodeDetails) {
         Episode episode = episodeRepository.findById(id)
@@ -50,6 +54,7 @@ public class EpisodeServiceImpl implements EpisodeService {
         return convertToDTO(episodeRepository.save(episode));
     }
 
+    @Transactional
     @Override
     public void deleteEpisode(Long id) {
         Episode episode = episodeRepository.findById(id)

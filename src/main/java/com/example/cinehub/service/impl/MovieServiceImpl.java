@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -32,12 +33,14 @@ public class MovieServiceImpl implements MovieService {
 
     @Autowired private GenreRepository genreRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<MovieDTO> getAllMoviesForAdmin() {
         List<Movie> movies = movieRepository.findAll();
         return movies.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<MovieDTO> getTrendingMovies() {
         List<Movie> movies = movieRepository.findAll();
@@ -47,12 +50,14 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<MovieDTO> getMoviesByMovieType(MovieType movieType) {
         List<Movie> movies = movieRepository.findByMovieType(movieType);
         return movies.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<MovieDTO> getMoviesByGenre(String genreSlug) {
         List<Movie> movies = movieRepository.findMoviesByGenreSlug(genreSlug);
@@ -62,6 +67,7 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public MovieDTO createMovie(MovieRequest request) {
         Movie movie  = new Movie();
@@ -87,6 +93,7 @@ public class MovieServiceImpl implements MovieService {
         return convertToDTO(movieRepository.save(movie));
     }
 
+    @Transactional
     @Override
     public MovieDTO updateMovie(Long id, MovieRequest movieDetails) {
         Movie movie = movieRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy phim"));
@@ -112,12 +119,14 @@ public class MovieServiceImpl implements MovieService {
         return convertToDTO(movieRepository.save(movie));
     }
 
+    @Transactional
     @Override
     public void deleteMovie(Long id) {
         Movie m = movieRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy phim"));
         movieRepository.delete(m);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public PageResponse<MovieDTO> getAllMoviesPaged(Pageable pageable) {
         Page<Movie> moviePage = movieRepository.findAll(pageable);
@@ -136,6 +145,7 @@ public class MovieServiceImpl implements MovieService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public PageResponse<MovieDTO> searchAndFilterMovies(String title, MovieType movieType, MovieStatus movieStatus, Pageable pageable) {
         Specification<Movie> spec = MovieSpecification.hasTitle(title)
