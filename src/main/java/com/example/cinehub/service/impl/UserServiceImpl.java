@@ -6,6 +6,7 @@ import com.example.cinehub.exception.BadRequestException;
 import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -63,14 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private UserDTO convertToDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername((user.getUsername()));
-        userDTO.setEmail(user.getEmail());
-        userDTO.setAvatarUrl(user.getAvatarUrl());
-        userDTO.setRole(user.getRole());
-        userDTO.setCreateAt(user.getCreateAt());
-        return userDTO;
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Override

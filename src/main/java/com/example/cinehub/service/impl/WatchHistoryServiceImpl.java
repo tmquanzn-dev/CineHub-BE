@@ -11,6 +11,7 @@ import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.repository.WatchHistoryRepository;
 import com.example.cinehub.service.WatchHistoryService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +22,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class WatchHistoryServiceImpl implements WatchHistoryService {
-    @Autowired
-    private WatchHistoryRepository watchHistoryRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private MovieRepository movieRepository;
-    @Autowired
-    private EpisodeRepository episodeRepository;
+    @Autowired private WatchHistoryRepository watchHistoryRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private MovieRepository movieRepository;
+    @Autowired private EpisodeRepository episodeRepository;
+    @Autowired private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -67,14 +65,10 @@ public class WatchHistoryServiceImpl implements WatchHistoryService {
 
 
     private WatchHistoryDTO convertToDTO(WatchHistory watchHistory) {
-        WatchHistoryDTO dto = new WatchHistoryDTO();
-        dto.setId((watchHistory.getId()));
+        WatchHistoryDTO dto = modelMapper.map(watchHistory, WatchHistoryDTO.class);
         dto.setMovieId(watchHistory.getMovie().getId());
         dto.setMovieTitle(watchHistory.getMovie().getTitle());
         dto.setPosterUrl(watchHistory.getMovie().getPosterUrl());
-        dto.setLastPosition(watchHistory.getLastPosition());
-        dto.setUpdatedAt(watchHistory.getUpdatedAt());
-
         if (watchHistory.getEpisode() != null) {
             dto.setEpisodeId(watchHistory.getEpisode().getId());
             dto.setEpisodeNumber(watchHistory.getEpisode().getEpisodeNumber());

@@ -7,6 +7,7 @@ import com.example.cinehub.exception.ResourceNotFoundException;
 import com.example.cinehub.repository.EpisodeRepository;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.EpisodeService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,8 @@ public class EpisodeServiceImpl implements EpisodeService {
     private EpisodeRepository episodeRepository;
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -63,13 +66,6 @@ public class EpisodeServiceImpl implements EpisodeService {
     }
 
     private EpisodeDTO convertToDTO(Episode episode) {
-        EpisodeDTO episodeDTO = new EpisodeDTO();
-        episodeDTO.setId(episode.getId());
-        episodeDTO.setTitle(episode.getTitle());
-        episodeDTO.setEpisodeNumber(episode.getEpisodeNumber());
-        episodeDTO.setVideoUrl(episode.getVideoUrl());
-        episodeDTO.setThumbnailUrl(episode.getThumbnailUrl());
-        episodeDTO.setDuration(episode.getDuration());
-        return episodeDTO;
+        return modelMapper.map(episode, EpisodeDTO.class);
     }
 }

@@ -11,6 +11,7 @@ import com.example.cinehub.repository.FavoriteRepository;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.FavoriteService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired private FavoriteRepository favoriteRepository;
     @Autowired private UserRepository userRepository;
     @Autowired private MovieRepository movieRepository;
+    @Autowired private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -62,11 +64,6 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     private FavoriteDTO convertToDTO(Favorite favorite) {
-        FavoriteDTO dto = new FavoriteDTO();
-        dto.setMovieId(favorite.getMovie().getId());
-        dto.setMovieTitle(favorite.getMovie().getTitle());
-        dto.setPosterUrl(favorite.getMovie().getPosterUrl());
-        dto.setAddedAt(favorite.getAddedAt());
-        return dto;
+        return modelMapper.map(favorite, FavoriteDTO.class);
     }
 }

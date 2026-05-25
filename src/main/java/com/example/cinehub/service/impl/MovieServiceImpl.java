@@ -13,6 +13,7 @@ import com.example.cinehub.repository.GenreRepository;
 import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.service.MovieService;
 import com.example.cinehub.specification.MovieSpecification;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,7 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movieRepository;
 
     @Autowired private GenreRepository genreRepository;
+    @Autowired private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -170,29 +172,13 @@ public class MovieServiceImpl implements MovieService {
 
     //Ham bổ trợ đóng vai trò convert thủ công(Mapping) từ Entity sang DTO sạch sẽ
     private MovieDTO convertToDTO(Movie movie) {
-        MovieDTO dto = new MovieDTO();
-        dto.setId(movie.getId());
-        dto.setTitle(movie.getTitle());
-        dto.setDescription(movie.getDescription());
-        dto.setPosterUrl(movie.getPosterUrl());
-        dto.setBackdropUrl(movie.getBackdropUrl());
-        dto.setRating(movie.getRating());
-        dto.setIsTrending(movie.getIsTrending());
-        dto.setMovieType(movie.getMovieType());
-        dto.setDuration(movie.getDuration());
-        dto.setReleaseDate(movie.getReleaseDate());
-        dto.setStatus(movie.getStatus());
-        dto.setIsTopRated(movie.getIsTopRated());
+         MovieDTO dto = modelMapper.map(movie, MovieDTO.class);
 
         // Convert tập hợp các Genres lồng bên trong sang GenreDTO công thức song song
         if (movie.getGenres() != null) {
-            Set<GenreDTO> genreDTOs = movie.getGenres().stream().map(genre -> {
-                GenreDTO gDto = new GenreDTO();
-                gDto.setId(genre.getId());
-                gDto.setName(genre.getName());
-                gDto.setSlug(genre.getSlug());
-                return gDto;
-            }).collect(Collectors.toSet());
+            Set<GenreDTO> genreDTOs = movie.getGenres().stream().map(
+                    genre -> modelMapper.map(genre, GenreDTO.class)
+            ).collect(Collectors.toSet());
             dto.setGenres(genreDTOs);
         }
         return dto;

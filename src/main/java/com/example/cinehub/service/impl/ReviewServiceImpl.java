@@ -9,6 +9,7 @@ import com.example.cinehub.repository.MovieRepository;
 import com.example.cinehub.repository.ReviewRepository;
 import com.example.cinehub.repository.UserRepository;
 import com.example.cinehub.service.ReviewService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +19,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
-    @Autowired
-    private ReviewRepository reviewRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private MovieRepository movieRepository;
+    @Autowired private ReviewRepository reviewRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private MovieRepository movieRepository;
+    @Autowired private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -58,16 +57,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private ReviewDTO convertToDTO(Review review) {
-        ReviewDTO dto = new ReviewDTO();
-        dto.setId(review.getId());
-        dto.setContent(review.getContent());
-        dto.setRating(review.getRating());
-        dto.setCreateAt(review.getCreateAt());
-        if (review.getUser() != null)
-        {
-            dto.setUserId(review.getUser().getId());
-            dto.setUsername(review.getUser().getUsername());
-        }
+        ReviewDTO dto = modelMapper.map(review, ReviewDTO.class);
+        dto.setUserId(review.getUser().getId());
+        dto.setUsername(review.getUser().getUsername());
         return  dto;
     }
 }

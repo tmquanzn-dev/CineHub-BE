@@ -4,6 +4,7 @@ import com.example.cinehub.dto.response.GenreDTO;
 import com.example.cinehub.entity.Genre;
 import com.example.cinehub.repository.GenreRepository;
 import com.example.cinehub.service.GenreService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class GenreServiceImpl implements GenreService {
     @Autowired
     private GenreRepository genreRepository;
+    @Autowired private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -32,11 +34,7 @@ public class GenreServiceImpl implements GenreService {
 
     // Hàm Convert ừ Genre Entity sang GenreDTO
     private GenreDTO convertToDTO(Genre genre) {
-        GenreDTO dto = new GenreDTO();
-        dto.setId(genre.getId());
-        dto.setName(genre.getName());
-        dto.setSlug(genre.getSlug());
-        return dto;
+        return modelMapper.map(genre, GenreDTO.class);
     }
 
 }
