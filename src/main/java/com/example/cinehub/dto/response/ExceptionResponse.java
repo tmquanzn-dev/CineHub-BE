@@ -11,6 +11,6 @@ import java.util.List;
 @Setter
 public class ExceptionResponse {
     private String error;
-    private List<String> details = new ArrayList<>();
+    private Object details; // Object để có thể dễ dàng đặt List <-> Map
     private LocalDateTime timestamp = LocalDateTime.now();
 }

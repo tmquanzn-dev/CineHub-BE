@@ -14,7 +14,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -25,10 +27,8 @@ public class GlobalExceptionHandler  {
     public ResponseEntity<Object> handleResourceNotFound(
              ResourceNotFoundException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError(ex.getMessage());
-        List<String> detail = new ArrayList<>();
-        detail.add("Kiểm tra lại đi");
-        exceptionResponse.setDetails(detail);
+        exceptionResponse.setError("Không tìm thấy tài nguyên");
+        exceptionResponse.setDetails(ex.getMessage());
         exceptionResponse.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
@@ -38,8 +38,8 @@ public class GlobalExceptionHandler  {
     public ResponseEntity<Object> handleBadRequest(
             BadRequestException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError(ex.getMessage());
-        exceptionResponse.getDetails().add("Yêu cầu không hợp lệ");
+        exceptionResponse.setError("Yêu cầu không hợp lệ");
+        exceptionResponse.setDetails(ex.getMessage());
         exceptionResponse.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
@@ -48,13 +48,13 @@ public class GlobalExceptionHandler  {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationException(
             MethodArgumentNotValidException ex, WebRequest request) {
-        List<String> errors  = ex.getBindingResult()
-                .getFieldErrors()
-                .stream().map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList());
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error-> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError("Dữ liệu không hợp lệ");
+        exceptionResponse.setError("Dữ liệu đầu vào không hợp lệ");
         exceptionResponse.setDetails(errors);
         exceptionResponse.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
@@ -65,8 +65,8 @@ public class GlobalExceptionHandler  {
     public ResponseEntity<Object> handleBadCredentials(
             BadCredentialsException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError(ex.getMessage());
-        exceptionResponse.getDetails().add("Kiểm tra lại thông tin đăng nhâp");
+        exceptionResponse.setError("Đăng nhập thất bại");
+        exceptionResponse.setDetails("Tài khoản hoặc mật khẩu không chính xác, vui lòng kiểm tra lại");
         exceptionResponse.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
     }
@@ -77,8 +77,8 @@ public class GlobalExceptionHandler  {
     public ResponseEntity<Object> handleGlobalException(
             Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setError(ex.getMessage());
-        exceptionResponse.getDetails().add(" Đã có lỗi xảy ra, vui lòng thử lại");
+        exceptionResponse.setError("Lỗi hệ thống");
+        exceptionResponse.setDetails("Đã có lỗi xảy ra từ phía máy chủ, vui lòng thử lại sau");
         exceptionResponse.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
